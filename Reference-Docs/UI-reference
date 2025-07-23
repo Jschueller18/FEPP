@@ -1,0 +1,353 @@
+---
+
+## Critical UI Components Missing from Scope
+
+### 1. Application Layout Architecture
+
+#### Header Component Pattern
+```typescript
+// Current Implementation: Fixed header with responsive navigation
+- Fixed positioning (z-50) with shadow-md
+- Responsive logo display (rectangular format, h-16)
+- Desktop navigation with hover states and active indicators
+- Mobile hamburger menu using Sheet component
+- User authentication dropdown with profile/orders/logout
+- Consistent color scheme: bg-secondary with white text
+```
+
+**Key Features Not in Scope:**
+- Mobile sheet navigation pattern
+- User dropdown menu with FontAwesome icons
+- Active route highlighting system
+- Logo variants (circular vs rectangular)
+
+#### Footer Component Architecture
+```typescript
+// 4-column responsive grid layout
+- Company branding with circular logo (h-16 w-16)
+- Quick Links navigation column
+- Support/Legal links column
+- Social media icons + email subscription
+- Consistent bg-primary theming
+```
+
+**Missing Elements:**
+- Email subscription form pattern
+- Social media icon grid (Facebook, Twitter, Instagram, Pinterest)
+- Multi-column responsive footer layout
+- Brand tagline display
+
+### 2. Survey System UI Patterns
+
+#### Progress Bar Component
+```typescript
+// 5-step horizontal progress indicator
+Steps: ["Usage", "Diet", "Health", "Flavor", "Info"]
+States: inactive | active | completed
+Responsive: Full labels on desktop, abbreviated on mobile
+```
+
+**Scope Gap:** No progress visualization specification for multi-step forms
+
+#### Form Section Architecture
+The current codebase uses modular form sections not documented in scope:
+
+```
+survey/
+├── dietary-sections/     (4 components)
+├── health-sections/      (3 components) 
+├── personal-sections/    (4 components)
+├── usage-sections/       (4 components)
+```
+
+**Missing Patterns:**
+- Sectioned form architecture
+- Step-by-step validation flow
+- Local storage persistence layer
+- Test data generation helpers
+
+### 3. Loading & Animation System
+
+#### Formula Creation Loading Animation
+```css
+// Custom CSS animations not in scope
+.formula-loading: 180px container with flask visualization
+.liquid: Gradient fill animation (2.5s ease-in-out)
+.bubbles: Multiple floating bubble effects
+.particles: Floating mineral particle effects
+.loading-text: Animated dots indicator
+```
+
+**Critical Missing Elements:**
+- 3-second minimum loading requirement
+- Custom CSS keyframe animations
+- Flask/liquid visual metaphor
+- Progress percentage display (0-100%)
+
+#### Keyframe Definitions
+```css
+@keyframes fillLiquid: Bottom-up liquid fill effect
+@keyframes rise: Bubble floating animation
+@keyframes float: Particle floating motion  
+@keyframes dots: Text loading indicator
+```
+
+### 4. Product Display Components
+
+#### Product Card Pattern
+```typescript
+// Dynamic image selection based on formula type
+Formula Types → Image Mapping:
+- "workout recovery" → Fitness imagery
+- "sleep support" → Bedroom/relaxation imagery  
+- "menstrual support" → Wellness imagery
+- "hangover recovery" → Recovery imagery
+- Default → General supplement imagery
+```
+
+**Scope Limitation:** No product visualization or image strategy specified
+
+#### Results Page Loading System
+```typescript
+// Sophisticated loading state management
+- Forced 3-second minimum display
+- Progress tracking (0-100%)
+- Local storage formula retrieval
+- Pending calculation handling
+- Login prompt for unauthenticated users
+```
+
+### 5. Authentication & User Management
+
+#### Dual Authentication Pattern
+```typescript
+// Auth form supports both login and registration
+- Single component with type switching
+- Comprehensive form validation (Zod schemas)
+- Return URL handling for redirects
+- Loading states with user feedback
+- Toast notification integration
+```
+
+**Missing from Scope:**
+- Registration form fields (firstName, lastName, phone)
+- Return URL redirect system
+- Loading state management during auth
+- Error handling patterns
+
+#### User Context Integration
+```typescript
+// Authentication state throughout app
+- Profile dropdown with user.firstName display
+- Conditional navigation (authenticated vs guest)
+- Order history access
+- Session management
+```
+
+### 6. Payment & Checkout Flow
+
+#### Stripe Integration Pattern
+```typescript
+// Checkout page architecture
+- Stripe Elements integration
+- Payment form with processing states
+- Order creation before payment
+- Success/failure handling with navigation
+- Query invalidation for data freshness
+```
+
+**Scope Gap:** Detailed checkout UI flow not specified
+
+### 7. Design System Implementation
+
+#### Color System (Tailwind Config)
+```typescript
+// Extended color palette beyond scope
+primary: {
+  DEFAULT: "hsl(var(--primary))",
+  light: "hsl(var(--primary-light))",
+  dark: "hsl(var(--primary-dark))"
+}
+secondary: {
+  DEFAULT: "hsl(var(--secondary))",
+  light: "hsl(var(--secondary-light))", 
+  dark: "hsl(var(--secondary-dark))"
+}
+```
+
+**Additional Colors Not in Scope:**
+- Chart color variables (1-5)
+- Sidebar color system
+- Extended primary/secondary variants
+
+#### Typography System
+```css
+// Custom font implementation
+font-sans: ["Open Sans", "ui-sans-serif", "system-ui"]
+font-heading: ["Montserrat", "ui-sans-serif", "system-ui"]
+```
+
+#### Component Library Usage
+**shadcn/ui Components in Use:**
+- Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
+- Button with variants (ghost, default) and sizes (sm, lg)
+- Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+- Input, Label, Textarea, Checkbox, Select
+- Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger
+- DropdownMenu with all sub-components
+- Toast, Toaster for notifications
+- Skeleton for loading states
+- Separator for visual breaks
+
+### 8. Food Reference Pages Architecture
+
+#### Reusable FoodReferencePage Component
+```typescript
+interface FoodReferencePageProps {
+  title: string;
+  description: string;
+  servingEquivalent: string;
+  guidelines: IntakeGuideline;
+  foodCategories: FoodCategory[];
+  disclaimerNote?: string;
+}
+```
+
+**Data Structure Pattern:**
+```typescript
+interface FoodCategory {
+  name: string;
+  foods: FoodItem[];
+}
+
+interface FoodItem {
+  name: string;
+  serving: string;
+  amount: string;
+}
+```
+
+**Pages Implemented:**
+- Sodium Rich Foods (/sodium-rich-foods)
+- Potassium Rich Foods (/potassium-rich-foods) 
+- Magnesium Rich Foods (/magnesium-rich-foods)
+- Calcium Rich Foods (/calcium-rich-foods)
+
+### 9. Home Page Layout Pattern
+
+#### Hero Section Architecture
+```typescript
+// Centered hero with CTA
+- Primary headline with font-heading
+- Descriptive subtext
+- Highlighted survey prompt box
+- Primary CTA button with icon
+- Responsive typography scaling
+```
+
+#### Features Section Grid
+```typescript
+// 3-column card grid
+Cards: [
+  { icon: "flask", title: "Personalized Formula" },
+  { icon: "medal", title: "Premium Quality" },
+  { icon: "heart", title: "Science-Backed" }
+]
+```
+
+### 10. Mobile-First Responsive Patterns
+
+#### Breakpoint Strategy
+```css
+// Responsive design patterns
+- Mobile-first approach
+- md: (768px+) for tablet/desktop
+- Hidden elements: .hidden md:flex, .md:hidden
+- Grid responsiveness: grid md:grid-cols-3
+- Typography scaling: text-3xl md:text-4xl lg:text-5xl
+```
+
+#### Mobile Navigation
+```typescript
+// Sheet-based mobile menu
+- Hamburger trigger button
+- Full-screen slide-out menu
+- Authenticated user sections
+- Menu item click handlers with navigation
+```
+
+---
+
+## Implementation Priority Matrix
+
+### High Priority (Core UX)
+1. **Loading Animation System** - Critical for user engagement
+2. **Progress Bar Component** - Essential for survey flow
+3. **Header/Footer Layout** - Foundation navigation structure
+4. **Authentication Forms** - User onboarding flow
+5. **Product Card Display** - Formula presentation
+
+### Medium Priority (Enhanced UX)
+1. **Food Reference Pages** - Educational content
+2. **Mobile Navigation** - Responsive experience
+3. **Toast Notification System** - User feedback
+4. **Checkout Flow UI** - Purchase completion
+
+### Lower Priority (Polish)
+1. **Social Media Integration** - Footer enhancements
+2. **Email Subscription** - Marketing features
+3. **Advanced Animations** - Particle effects
+
+---
+
+## Technical Implementation Notes
+
+### CSS Variables System
+The current implementation uses CSS custom properties for theming:
+```css
+:root {
+  --primary: 137, 43%, 20%;
+  --secondary: 196, 89%, 59%;
+  --accent: 183, 80%, 85%;
+  /* Extended palette with light/dark variants */
+}
+```
+
+### Icon Strategy
+Current implementation uses FontAwesome (fa-solid, fa-brands classes) throughout the interface. This should be considered for the Next.js migration.
+
+### State Management Patterns
+- React Context for authentication state
+- Local storage for survey persistence
+- TanStack Query for server state
+- Form state with React Hook Form + Zod validation
+
+### Animation Requirements
+- Minimum 3-second loading displays
+- Smooth transitions between states
+- Progress indication for long operations
+- Micro-interactions for user feedback
+
+---
+
+## Recommendations for v2 Implementation
+
+### 1. Preserve Critical UX Patterns
+- Maintain the 3-second loading experience
+- Keep the modular survey section architecture
+- Preserve the dual authentication system
+- Maintain responsive navigation patterns
+
+### 2. Enhance Missing Elements
+- Add comprehensive error boundaries
+- Implement better loading state management
+- Create consistent spacing/typography system
+- Add accessibility improvements
+
+### 3. Architecture Considerations
+- Consider component composition for reusability
+- Implement proper TypeScript interfaces for all props
+- Create consistent naming conventions
+- Plan for internationalization if needed
+
+This document should be used alongside the main scope document to ensure no critical UI patterns are lost in the v2 rebuild.

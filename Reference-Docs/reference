@@ -1,0 +1,231 @@
+# Personal Potions v2 - Codebase Reference Guide
+
+This guide is optimized for developers and AI assistants. It contains only the necessary code patterns, schemas, and business logic required for development. **This is not a substitute for the full technical specification.**
+
+---
+
+## Quick Start
+
+**Project**: Custom electrolyte formula calculator with personalized mineral ratios based on user survey data.
+
+### Key File Locations
+| Component | Path | Purpose |
+|-----------|------|---------|
+| **Calculation Engine** | `/lib/calculation-engine/core/` | 7-step formula calculation (DO NOT MODIFY) |
+| **API Routes** | `/app/api/` | All backend endpoints |
+| **Database Schema** | `/prisma/schema.prisma` | Supabase/PostgreSQL models |
+| **Services** | `/lib/services/` | Business logic layer |
+| **Type Definitions** | `/types/` | TypeScript interfaces |
+| **UI Components** | `/components/` | React components |
+| **Survey Flow** | `/app/(public)/survey/` | 5-step survey pages |
+
+### Install Commands
+```bash
+npx create-next-app@latest personal-potions-v2 --typescript --tailwind --app
+cd personal-potions-v2
+npm install @supabase/supabase-js stripe @stripe/stripe-js openai prisma @prisma/client
+npm install lucide-react @radix-ui/react-slot class-variance-authority clsx tailwind-merge
+npm install -D @types/node
+npx prisma init
+```
+
+### Key Environment Variables
+```bash
+# .env.local
+DATABASE_URL="postgresql://user:pass@localhost:5432/personal_potions"
+NEXT_PUBLIC_SUPABASE_URL=https://[project].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[anon-key]
+SUPABASE_SERVICE_KEY=[service-key]
+STRIPE_SECRET_KEY=sk_test_[key]
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_[key]
+STRIPE_WEBHOOK_SECRET=whsec_[secret]
+OPENAI_API_KEY=sk-[key]
+NEXT_PUBLIC_URL=http://localhost:3000
+```
+
+## Architecture Rules
+
+1. **Strict Frontend/Backend Separation**: Frontend (`/app/(public)`, `/app/(protected)`) handles UI only. All calculations happen in backend API routes (`/app/api/*`).
+
+2. **Calculation Engine is Sacred**: The 7-step calculation logic in `/lib/calculation-engine/*` is intellectual property. NEVER modify core formulas, only integrate them.
+
+3. **Database Schema**: Use JSONB for survey data with validation. Single source of truth: `survey_responses.survey_data` contains `{personalInfo, usageGoals, healthProfile, preferences}`.
+
+4. **Service Layer Pattern**: API routes (`/app/api/*`) validate input and call services (`/lib/services/*`). Services contain business logic and call the calculation engine.
+
+5. **Type Safety**: Every database query and API response must be fully typed. Use generated types from Supabase in `/types/database.ts`.
+
+## Protected Code (DO NOT MODIFY)
+
+```typescript
+// lib/calculation-engine/core/engine.ts
+export interface CalculationEngine {
+  determinePrimaryUseCase(data: SurveyData): UseCase;
+  calculateOptimalIntake(data: SurveyData): MineralIntake;
+  estimateCurrentIntake(data: SurveyData): MineralIntake;
+  calculateDeficit(optimal: MineralIntake, current: MineralIntake): MineralIntake;
+  generateBaseFormula(useCase: UseCase): BaseFormula;
+  adjustForDeficits(base: BaseFormula, deficit: MineralIntake, useCase: UseCase): Formula;
+  finalizeFormula(formula: Formula, useCase: UseCase): Formula;
+}
+
+// lib/calculation-engine/core/rules.ts
+export const USE_CASE_PRIORITY = [
+  { condition: (d: SurveyData) => d.healthProfile.sleepIssues, result: 'bedtime' },
+  { condition: (d: SurveyData) => d.healthProfile.menstrualSymptoms, result: 'menstrual' },
+  { condition: (d: SurveyData) => d.usageGoals.sweatLevel === 'heavy' && d.usageGoals.workoutFrequency === 'daily', result: 'sweat' },
+  { condition: () => true, result: 'daily' }
+];
+
+export const BASE_FORMULATIONS = {
+  daily: { sodium: 150, potassium: 400, magnesium: 100, calcium: 200 },
+  menstrual: { sodium: 250, potassium: 450, magnesium: 150, calcium: 250 },
+  hangover: { sodium: 500, potassium: 400, magnesium: 150, calcium: 200 },
+  sweat: 'USE_SPORT_CALCULATOR',
+  bedtime: 'USE_BEDTIME_CALCULATOR'
+};
+
+export const DEFICIT_ADJUSTMENT_FACTORS = {
+  default: { sodium: 0.15, potassium: 0.25, magnesium: 0.25, calcium: 0.2 },
+  sweat: { sodium: 0.1, potassium: 0.2, magnesium: 0.3, calcium: 0.3 },
+  bedtime: { sodium: 0.05, potassium: 0.15, magnesium: 0.2, calcium: 0.15 },
+  menstrual: { sodium: 0.15, potassium: 0.2, magnesium: 0.15, calcium: 0.25 }
+};
+
+export const CALCIUM_MAGNESIUM_RATIOS = {
+  daily: 2.0, sweat: 2.0, bedtime: 2.0, menstrual: 1.8, hangover: 0.5
+};
+
+// lib/calculation-engine/calculators/potassium.ts
+export function calculateOptimalPotassium(data: SurveyData): number {
+  const BASE_RDA = 4700;
+  const ageMultiplier = data.personalInfo.age < 18 ? 0.8 : data.personalInfo.age > 70 ? 0.9 : 1.0;
+  const activityMultipliers = { sedentary: 1.0, lightly: 1.05, moderately: 1.1, very: 1.2 };
+  
+  let optimal = BASE_RDA * ageMultiplier * activityMultipliers[data.usageGoals.activityLevel];
+  
+  if (data.healthProfile.conditions.includes('hypertension')) optimal *= 1.1;
+  if (data.healthProfile.conditions.includes('kidney-disease')) optimal *= 0.7;
+  
+  return optimal;
+}
+
+// lib/calculation-engine/core/implementation.ts
+export class PersonalPotionsEngine implements CalculationEngine {
+  async calculate(surveyData: SurveyData): Promise<Formula> {
+    const useCase = this.determinePrimaryUseCase(surveyData);
+    const optimalIntake = this.calculateOptimalIntake(surveyData);
+    const currentIntake = this.estimateCurrentIntake(surveyData);
+    const deficit = this.calculateDeficit(optimalIntake, currentIntake);
+    const baseFormula = this.generateBaseFormula(useCase);
+    const adjustedFormula = this.adjustForDeficits(baseFormula, deficit, useCase);
+    return this.finalizeFormula(adjustedFormula, useCase);
+  }
+  
+  private adjustForDeficits(base: BaseFormula, deficit: MineralIntake, useCase: UseCase): Formula {
+    const factors = DEFICIT_ADJUSTMENT_FACTORS[useCase] || DEFICIT_ADJUSTMENT_FACTORS.default;
+    const RDAs = { sodium: 3500, potassium: 4700, magnesium: 400, calcium: 1000 };
+    
+    return {
+      sodium: base.sodium + (base.sodium * (deficit.sodium / RDAs.sodium) * factors.sodium),
+      potassium: base.potassium + (base.potassium * (deficit.potassium / RDAs.potassium) * factors.potassium),
+      magnesium: base.magnesium + (base.magnesium * (deficit.magnesium / RDAs.magnesium) * factors.magnesium),
+      calcium: base.calcium + (base.calcium * (deficit.calcium / RDAs.calcium) * factors.calcium)
+    };
+  }
+  
+  private finalizeFormula(formula: Formula, useCase: UseCase): Formula {
+    const targetRatio = CALCIUM_MAGNESIUM_RATIOS[useCase];
+    formula.calcium = formula.magnesium * targetRatio;
+    return formula;
+  }
+}
+```
+
+## Critical Implementation Notes
+
+### Survey Data Structure
+```typescript
+interface SurveyData {
+  personalInfo: {
+    firstName: string;
+    email: string;
+    age: number;
+    gender: 'male' | 'female' | 'other';
+    weight: number; // lbs
+  };
+  usageGoals: {
+    usageTypes: UseCase[];
+    activityLevel: 'sedentary' | 'lightly' | 'moderately' | 'very';
+    workoutFrequency?: 'daily' | '4-6-per-week' | '2-3-per-week' | 'rarely';
+    sweatLevel?: 'light' | 'moderate' | 'heavy' | 'excessive';
+  };
+  healthProfile: {
+    conditions: string[];
+    medications: string[];
+    sleepIssues?: boolean;
+    menstrualSymptoms?: boolean;
+  };
+  preferences: {
+    flavor: string;
+    sweetenerAmount: 'none' | 'light' | 'moderate' | 'sweet';
+  };
+}
+```
+
+### API Route Pattern
+```typescript
+// app/api/formula/calculate/route.ts
+import { PersonalPotionsEngine } from '@/lib/calculation-engine/core/implementation';
+
+export async function POST(request: Request) {
+  const surveyData = await request.json();
+  
+  // Validate survey data structure
+  if (!validateSurveyData(surveyData)) {
+    return Response.json({ error: 'Invalid survey data' }, { status: 400 });
+  }
+  
+  const engine = new PersonalPotionsEngine();
+  const formula = await engine.calculate(surveyData);
+  
+  // Save to database
+  const { data: savedFormula } = await db.formulas.create({
+    minerals: formula,
+    survey_data: surveyData,
+    price: calculatePrice(formula),
+    name: generateFormulaName(surveyData),
+    type: surveyData.usageGoals.usageTypes[0]
+  });
+  
+  return Response.json({ formula: savedFormula });
+}
+```
+
+### UI Components Must Use
+- **Colors**: `primary: hsl(137, 43%, 20%)`, `secondary: hsl(196, 89%, 59%)`, `accent: hsl(183, 80%, 85%)`
+- **Progress Bar**: Show 5 steps with animated fill
+- **Loading**: Minimum 3 seconds with floating mineral icons
+- **Survey Validation**: Each step must validate before proceeding
+
+### External Service Integration
+```typescript
+// OpenAI: Use gpt-4o model, 200-250 word descriptions
+// Stripe: Use Checkout Sessions, not Payment Intents
+// Supabase: Enable Row Level Security on all tables
+```
+
+### Testing Requirements
+Any changes to calculation logic must pass these tests:
+```typescript
+expect(engine.calculate(dailyUserData)).toEqual({
+  sodium: 150, potassium: 400, magnesium: 100, calcium: 200
+});
+```
+
+### Common Pitfalls to Avoid
+1. Never store calculation logic in the database
+2. Don't modify mineral ratios outside the calculation engine
+3. Always validate survey data before processing
+4. Use JSONB for flexibility, not separate columns for each field
+5. Loading animation must be exactly 3 seconds minimum
