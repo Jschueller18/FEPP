@@ -579,3 +579,28 @@ Optimize for mobile:
 3. **Low Priority**: Remove redundant questions and simplify health conditions
 
 **🚀 Ready for AI agent execution with clear context and parallel workflows!** 
+
+---
+
+## Agent Handoff Notes (2025-08-09)
+
+- Navigation & stability
+  - Guarded step-mount navigation in all survey steps to avoid re-render loops (only call `navigateToStep` if `currentStep` differs).
+  - Memoized context methods in `contexts/SurveyContext.tsx` to stop effect cascades.
+- Clickable boxes
+  - Updated shared `SurveyRadio` and `SurveyCheckbox` to make entire option boxes clickable. Converted Step 1 inline controls to label-wrapped boxes.
+- Step composition (temporary alignment vs scratchpad)
+  - Current order in code: 1 Usage → 2 Diet → 3 Health → 4 Flavor → 5 Personal Info/Review. Scratchpad lists Step 4 as Intake and Step 5 as Flavor; we kept Flavor on Step 4 to unblock navigation and validation. Align later if needed.
+- Flavor Preferences (Step 4)
+  - Correct questions now live here: `flavor-type` (tart-cherry/lemon-lime/mango/unflavored), `sweetener-type` (cane-sugar/stevia-erythritol), `flavor-intensity` (0–4), `sweetener-amount` (0–4).
+  - Removed misplaced intake questions from this page.
+  - Validation updated in `hooks/useSurvey.ts` to check the new fields.
+  - Initial state updated in `SurveyContext` to numeric intensities (default 0).
+- Personal Info/Review (Step 5)
+  - Removed flavor/sweetener selectors (now on Step 4). Back button label fixed to "Back: Flavor Preferences".
+- Known gaps / next tasks
+  - Diet/Nutrition intake UI needs redesign to support servings-based estimation with links to food reference pages (see `Reference-Docs/UI-reference` section 8). Dual-format support (legacy strings and numeric) required; use `LEGACY_INTAKE_ESTIMATES` when added.
+  - Step 3 health conditions/medications may need simplification and better lists per scratchpad.
+  - Consider refactoring Step 1 to use `SurveyRadio`/`SurveyCheckbox` components to avoid inline duplication entirely.
+- Testing
+  - Lints green on edited files. Full survey navigation works with proper validation gates. 
