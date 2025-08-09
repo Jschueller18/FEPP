@@ -519,4 +519,63 @@ Optimize for mobile:
 - [ ] Database data flow
 - [ ] Authentication state management
 
+---
+
+## **🚨 CRITICAL SURVEY ISSUES IDENTIFIED (2025-01-XX)**
+
+### **Survey Step Order Correction NEEDED**
+**Current Issue**: Survey step order in context doesn't match intended design
+- **Current Context Order**: 1. USAGE_GOALS, 2. DIET_NUTRITION, 3. HEALTH_PROFILE, 4. FLAVOR_PREFERENCES, 5. PERSONAL_INFO
+- **Correct Order Should Be**: 1. Usage, 2. Diet, 3. Health, 4. Flavor, 5. Info
+- **Files to Update**: `contexts/SurveyContext.tsx` - Reorder `SURVEY_STEPS` constants
+- **Status**: ✅ **Navigation bug fixed** - Step pages now properly set current step on mount
+
+### **UX Issues Requiring Immediate Attention**
+
+#### **1. Clickable Area Enhancement**
+- **Issue**: Only header text and checkbox clickable on survey answer options
+- **Required**: Entire answer box (text + checkbox + container) should be clickable
+- **Impact**: Poor mobile/touch experience
+- **Files**: All survey step pages (step-1 through step-5)
+
+#### **2. Diet/Nutrition Page Format Issues**
+- **Issue**: Mineral intake questions need user-friendly format like old website
+- **Current**: Basic dropdown selections
+- **Required**: More intuitive intake selection UI
+- **Files**: `app/(public)/survey/step-2/page.tsx`
+
+#### **3. Supplement Questions Restructure**
+- **Current**: Multiple-choice current supplements question
+- **Required**: 
+  - Simple yes/no: "Do you take any supplements involving electrolytes?"
+  - If yes → show free-response boxes for exact amounts
+- **Files**: `app/(public)/survey/step-2/page.tsx`
+
+#### **4. Health Conditions Simplification**
+- **Issue**: Explanations for each health condition make question too large and potentially misleading
+- **Required**: Remove explanations, keep simple multiple-choice list
+- **Files**: `app/(public)/survey/step-3/page.tsx`
+
+#### **5. Medications Question Redesign**
+- **Current**: Free-response "Are you currently taking any medications?"
+- **Required**: 
+  - Multiple-choice list of known electrolyte-affecting medications
+  - "Add medication" button for unknowns
+  - When "Add medication" used → trigger LLM review alert if medication could affect electrolyte needs
+- **Files**: `app/(public)/survey/step-3/page.tsx`
+
+#### **6. Remove Redundant Sleep Question**
+- **Issue**: "Do you have trouble sleeping?" is redundant with sleep support option
+- **Required**: Remove unless proven valid/important
+- **Files**: `app/(public)/survey/step-3/page.tsx`
+
+### **Backend Integration Requirements**
+- **LLM Medication Review**: When unknown medications added, system should prompt LLM to assess electrolyte interaction risks
+- **Alert System**: Unknown medication additions should trigger review workflow
+
+### **Next Agent Priorities**
+1. **High Priority**: Fix clickable areas for better UX
+2. **Medium Priority**: Restructure supplement and medication questions
+3. **Low Priority**: Remove redundant questions and simplify health conditions
+
 **🚀 Ready for AI agent execution with clear context and parallel workflows!** 
