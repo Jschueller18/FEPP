@@ -604,3 +604,145 @@ Optimize for mobile:
   - Consider refactoring Step 1 to use `SurveyRadio`/`SurveyCheckbox` components to avoid inline duplication entirely.
 - Testing
   - Lints green on edited files. Full survey navigation works with proper validation gates. 
+
+---
+
+## Diet/Nutrition (Step 2) – Implementation Notes (2025-08-10)
+
+- Intake UI
+  - Quick/Exact tabs implemented. Quick stores direct mg values via 3 presets per nutrient; Exact accepts free mg/day.
+  - Suggested foods moved from per-option helpers to one subtext line per nutrient.
+  - Links wired to resource pages for nutrient-dense foods.
+- Data handling
+  - convertIntakeToMg treats numeric input > 60 as mg/day; legacy strings still supported for back-compat.
+  - No serving-based UI exposed anymore.
+- Resource pages
+  - Added under `/resources/*-rich-foods` with shared `FoodReferencePage`.
+  - Styling aligned with site (cyan gradient header, cyan-accented cards), two-column layout on desktop, single column on mobile.
+
+Follow-ups
+- Consider removing serving-conversion path and legacy IntakeLevel types once mg-only usage is confirmed in production.
+- Step 2 supplements: removed separate question; total intake now explicitly includes diet + supplements (copy updated). No additional supplement inputs.
+- Optional: add analytics events for clicks on resource links from Step 2.
+- Keep link slugs stable: `/resources/sodium-rich-foods`, `/resources/potassium-rich-foods`, `/resources/magnesium-rich-foods`, `/resources/calcium-rich-foods`.
+
+---
+
+## Completion Update (2025-08-11)
+
+- Step 2 (Diet/Nutrition)
+  - Removed "Current Supplements" block; intake now represents diet + supplements combined. Heading and helper copy updated accordingly.
+  - No schema changes; context continues to store intake under `sodium-intake`, `potassium-intake`, `magnesium-intake`, `calcium-intake`.
+
+- Step 3 (Health Profile)
+  - Simplified conditions list (removed explanations; kept labels only).
+  - Redesigned medications: checkbox list of known meds + "Add medication" for custom entries; shows review notice for added meds (LLM hook optional later).
+  - Removed redundant sleep question block.
+
+- Context & consistency
+  - Aligned `activity-level` values to enum form: `sedentary`, `lightly-active`, `moderately-active`, `very-active`.
+  - Updated Step 1 options and defaults to match.
+  - Expanded `sweat-level` options to include `minimal` to match validator.
+  - Removed unused `current-supplements` from `SurveyContext` initial state.
+  - Fixed Step 5 summary bindings to use flat keys from `SurveyContext`.
+
+- Quality
+  - Lints clean on edited files; test suite passing.
+
+---
+
+## Critical context for future agents (avoid pitfalls)
+
+- Activity level enums must use: `sedentary`, `lightly-active`, `moderately-active`, `very-active`. Do not use `lightly`/`moderately`/`very` without the `-active` suffix.
+- Intake fields support dual formats: legacy strings (e.g., "8-10") and numeric strings (e.g., "2400"). UI currently captures mg/day directly, but backend mapping still expects dual-format support and `intake_formats` keys in DB. Keep both until deprecation is explicit.
+- Supplements UI removed. Total intake equals diet + supplements. Numeric supplement fields (`sodium-supplement`, etc.) still exist in types/validator but are not collected in UI. Don’t re-introduce separate supplement questions unless product direction changes.
+- Sleep question was removed from Step 3. Sleep-related fields remain under the "Bedtime" usage path in Step 1. Avoid duplicating sleep questions in multiple steps.
+- Medications: Known checkbox list + "Add medication" uses a prompt. LLM review is NOT implemented; hook a call in Step 3 when adding custom meds if/when backend endpoint is available.
+- State model: The app uses flat `CustomerData` keys in `SurveyContext`. The nested `types/survey-data.ts` is not the source of truth for runtime survey state. Align changes with `CustomerData` + `SurveyContext`.
+- Validation duplication: There is lightweight step validation in `hooks/useSurvey.ts` and a richer ruleset in `lib/survey/survey-validator.ts`. Prefer centralizing future validation logic to avoid drift.
+- Resource links: Keep nutrient resource slugs stable as referenced in Step 2 copy.
+
+---
+
+## Survey Data Shape Reference (2025-08-11)
+
+Authoritative runtime state lives in `contexts/SurveyContext.tsx` under a flat `CustomerData`-compatible object. Below are the new/changed fields added in this chat, their types, allowed values, where the value is collected in the survey, and any special handling.
+
+Fields added/updated
+- daily-water-intake: number (fl oz)
+  - Step: Step 1 (Usage) → Daily use case card
+  - UI: numeric input, fl oz/day
+- workout-duration: WorkoutDuration
+  - Allowed: under-30min | 30-60min | 60-90min | over-90min (legacy values 30-60 | 60-90 | 90-120 | 120+ also supported in types)
+  - Step: Step 1 (Usage) → Workout use case card
+- workout-intensity: WorkoutIntensity
+  - Allowed: low | moderate | high | very-high
+  - Step: Step 1 (Usage) → Workout use case card
+- hangover-severity: HangoverSeverity
+  - Allowed: mild | moderate | severe
+  - Step: Step 1 (Usage) → Hangover use case card
+- symptom-severity: SymptomSeverity
+  - Allowed: mild | moderate | severe
+  - Step: Step 1 (Usage) → Menstrual use case card
+- menstrual-flow: MenstrualFlow
+  - Allowed: light | moderate | heavy
+  - Step: Step 1 (Usage) → Menstrual use case card
+- protein-intake: 'low' | 'moderate' | 'high' | 'very-high'
+  - Step: Step 2 (Diet) right after dietary preferences
+- flavor-type: string (unchanged)
+  - Step: Step 4 (Flavor). Also mirrors into legacy field `flavor` for downstream compatibility
+- sweetener-type: string including 'unsweetened'
+  - Step: Step 4 (Flavor). If 'unsweetened' selected, `sweetener-amount` is auto-set to 0
+- flavor-intensity: number (0–4)
+  - Step: Step 4. Shown only when `flavor-type` !== 'unflavored'
+- sweetener-amount: number (0–4)
+  - Step: Step 4. Shown only when `sweetener-type` is set and not 'unsweetened'
+
+JSON example (subset)
+```json
+{
+  "usage-types": ["daily", "workout", "hangover", "menstrual"],
+  "daily-goals": ["general-wellness", "energy-boost"],
+  "daily-water-intake": 72,
+
+  "workout-frequency": "4-6-per-week",
+  "workout-duration": "60-90min",
+  "workout-intensity": "high",
+
+  "hangover-timing": "next-morning",
+  "hangover-symptoms": ["headache", "dehydration"],
+  "hangover-severity": "moderate",
+
+  "menstrual-symptoms": ["cramps", "fatigue"],
+  "symptom-severity": "moderate",
+  "menstrual-flow": "moderate",
+
+  "dietary-preferences": ["keto"],
+  "protein-intake": "high",
+  "sodium-intake": "2000",
+  "potassium-intake": "2400",
+  "magnesium-intake": "300",
+  "calcium-intake": "1100",
+
+  "activity-level": "moderately-active",
+  "exercise-type": ["cardio", "strength"],
+  "sweat-level": "moderate",
+
+  "flavor-type": "lemon-lime",
+  "flavor": "lemon-lime",
+  "flavor-intensity": 3,
+  "sweetener-type": "stevia-erythritol",
+  "sweetener-amount": 2
+}
+```
+
+Type links
+- New enums defined in `types/enums.ts`:
+  - WorkoutDuration, WorkoutIntensity, HangoverSeverity, MenstrualFlow, SymptomSeverity
+- `CustomerData` extended in `types/interfaces.ts` with: 'hangover-severity', 'symptom-severity', 'menstrual-flow', 'protein-intake'
+- Initial defaults added in `contexts/SurveyContext.tsx`
+
+Notes
+- Flavor legacy field write-through: Step 4 writes both `flavor-type` and `flavor` to maintain compatibility with any consumers expecting `flavor`.
+- Selecting 'unsweetened' sets `sweetener-amount` to 0 to avoid mismatched state.
+- All new fields are saved via `updateData` and persisted to localStorage through the context layer.
