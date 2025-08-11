@@ -1,0 +1,123 @@
+import FoodReferencePage from "@/components/food-reference-page";
+
+export default function MagnesiumRichFoods() {
+  const foodCategories = [
+    {
+      name: "Nuts & Seeds",
+      foods: [
+        { name: "Almonds", serving: "1 oz (23 nuts)", amount: "80mg" },
+        { name: "Cashews", serving: "1 oz", amount: "75mg" },
+        { name: "Peanuts", serving: "1/4 cup", amount: "65mg" },
+        { name: "Brazil nuts", serving: "1 oz (6-8 nuts)", amount: "100mg" },
+        { name: "Pumpkin seeds", serving: "2 tbsp", amount: "75mg" },
+        { name: "Sunflower seeds", serving: "1/4 cup", amount: "100mg" },
+        { name: "Flax seeds", serving: "2 tbsp", amount: "55mg" },
+        { name: "Chia seeds", serving: "2 tbsp", amount: "95mg" },
+        { name: "Tahini (sesame paste)", serving: "2 tbsp", amount: "60mg" },
+      ]
+    },
+    {
+      name: "Leafy Greens",
+      foods: [
+        { name: "Spinach", serving: "1/2 cup cooked", amount: "80mg" },
+        { name: "Swiss chard", serving: "1/2 cup cooked", amount: "75mg" },
+        { name: "Kale", serving: "1 cup cooked", amount: "30mg" },
+        { name: "Collard greens", serving: "1/2 cup cooked", amount: "60mg" },
+        { name: "Beet greens", serving: "1/2 cup cooked", amount: "50mg" },
+        { name: "Mustard greens", serving: "1/2 cup cooked", amount: "35mg" },
+        { name: "Turnip greens", serving: "1/2 cup cooked", amount: "30mg" },
+      ]
+    },
+    {
+      name: "Beans & Legumes",
+      foods: [
+        { name: "Black beans", serving: "1/2 cup cooked", amount: "60mg" },
+        { name: "Navy beans", serving: "1/2 cup cooked", amount: "50mg" },
+        { name: "Kidney beans", serving: "1/2 cup cooked", amount: "45mg" },
+        { name: "Chickpeas", serving: "1/2 cup cooked", amount: "40mg" },
+        { name: "Lentils", serving: "1/2 cup cooked", amount: "35mg" },
+        { name: "Soybeans", serving: "1/2 cup cooked", amount: "75mg" },
+        { name: "Edamame", serving: "1/2 cup", amount: "50mg" },
+        { name: "Tofu, firm", serving: "1/2 cup", amount: "50mg" },
+      ]
+    },
+    {
+      name: "Whole Grains",
+      foods: [
+        { name: "Brown rice", serving: "1/2 cup cooked", amount: "40mg" },
+        { name: "Quinoa", serving: "1/2 cup cooked", amount: "60mg" },
+        { name: "Buckwheat", serving: "1/2 cup cooked", amount: "55mg" },
+        { name: "Oatmeal", serving: "1 cup cooked", amount: "55mg" },
+        { name: "Whole wheat bread", serving: "2 slices", amount: "45mg" },
+        { name: "Wheat bran", serving: "2 tbsp", amount: "45mg" },
+        { name: "Wild rice", serving: "1/2 cup cooked", amount: "50mg" },
+        { name: "Bulgur", serving: "1/2 cup cooked", amount: "55mg" },
+      ]
+    },
+    {
+      name: "Fish & Seafood",
+      foods: [
+        { name: "Mackerel", serving: "3 oz", amount: "80mg" },
+        { name: "Salmon", serving: "3 oz", amount: "25mg" },
+        { name: "Halibut", serving: "3 oz", amount: "90mg" },
+        { name: "Tuna", serving: "3 oz", amount: "25mg" },
+        { name: "Pollock", serving: "3 oz", amount: "70mg" },
+        { name: "Scallops", serving: "3 oz", amount: "30mg" },
+      ]
+    },
+    {
+      name: "Fruits",
+      foods: [
+        { name: "Avocado", serving: "1/2 medium", amount: "30mg" },
+        { name: "Banana", serving: "1 medium", amount: "30mg" },
+        { name: "Dried figs", serving: "1/4 cup", amount: "40mg" },
+        { name: "Dried apricots", serving: "1/4 cup", amount: "30mg" },
+        { name: "Kiwi", serving: "1 large", amount: "25mg" },
+        { name: "Papaya", serving: "1 cup", amount: "30mg" },
+        { name: "Raspberries", serving: "1 cup", amount: "25mg" },
+        { name: "Guava", serving: "1 medium", amount: "20mg" },
+      ]
+    },
+    {
+      name: "Other Vegetables",
+      foods: [
+        { name: "Potato with skin", serving: "1 medium", amount: "45mg" },
+        { name: "Sweet potato", serving: "1 medium", amount: "30mg" },
+        { name: "Artichoke", serving: "1 medium", amount: "75mg" },
+        { name: "Okra", serving: "1/2 cup cooked", amount: "45mg" },
+        { name: "Beets", serving: "1/2 cup cooked", amount: "30mg" },
+        { name: "Broccoli", serving: "1/2 cup cooked", amount: "15mg" },
+        { name: "Brussels sprouts", serving: "1/2 cup cooked", amount: "15mg" },
+        { name: "Squash", serving: "1/2 cup cooked", amount: "30mg" },
+      ]
+    },
+    {
+      name: "Other Foods",
+      foods: [
+        { name: "Dark chocolate (70-85%)", serving: "1 oz", amount: "65mg" },
+        { name: "Molasses, blackstrap", serving: "1 tbsp", amount: "50mg" },
+        { name: "Almond milk", serving: "1 cup", amount: "15mg" },
+        { name: "Soy milk", serving: "1 cup", amount: "60mg" },
+        { name: "Yogurt", serving: "1 cup", amount: "30mg" },
+        { name: "Coffee", serving: "8 oz", amount: "8mg" },
+        { name: "Cacao powder", serving: "1 tbsp", amount: "25mg" },
+        { name: "Nutritional yeast", serving: "2 tbsp", amount: "25mg" },
+      ]
+    },
+  ];
+
+  return (
+    <FoodReferencePage
+      title="Magnesium-Rich Foods Reference"
+      description="Use this guide to help estimate your magnesium intake."
+      servingEquivalent="100mg of magnesium"
+      guidelines={{
+        averageIntake: "~300mg per day (3 servings)",
+        recommendedIntake: "360-500mg per day (3.6-5 servings)",
+        additionalNote: "Higher for athletes and active individuals"
+      }}
+      foodCategories={foodCategories}
+      disclaimerNote="These values are approximate. Actual magnesium content can vary based on soil quality, food processing, and cooking methods."
+    />
+  );
+}

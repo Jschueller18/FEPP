@@ -1,0 +1,125 @@
+import FoodReferencePage from "@/components/food-reference-page";
+
+export default function SodiumRichFoods() {
+  const foodCategories = [
+    {
+      name: "Table Salt & Seasonings",
+      foods: [
+        { name: "Table salt", serving: "1/4 tsp", amount: "500mg" },
+        { name: "Sea salt", serving: "1/4 tsp", amount: "500mg" },
+        { name: "Soy sauce", serving: "1 tbsp", amount: "1000mg" },
+        { name: "Seasoning salt", serving: "1 tsp", amount: "1500mg" },
+        { name: "Taco seasoning", serving: "2 tsp", amount: "400mg" },
+        { name: "Bouillon cube", serving: "1 cube", amount: "1000mg" },
+        { name: "Worcestershire sauce", serving: "1 tbsp", amount: "200mg" },
+        { name: "Meat tenderizer", serving: "1 tsp", amount: "1750mg" },
+      ]
+    },
+    {
+      name: "Processed Meats",
+      foods: [
+        { name: "Bacon", serving: "3 slices", amount: "500mg" },
+        { name: "Deli ham", serving: "2 oz", amount: "700mg" },
+        { name: "Hot dog", serving: "1 hot dog", amount: "600mg" },
+        { name: "Salami", serving: "3 slices", amount: "500mg" },
+        { name: "Sausage", serving: "2 links", amount: "500mg" },
+        { name: "Pepperoni", serving: "14 slices", amount: "560mg" },
+        { name: "Smoked salmon", serving: "3 oz", amount: "600mg" },
+        { name: "Vienna sausage", serving: "1 can", amount: "800mg" },
+      ]
+    },
+    {
+      name: "Canned Foods",
+      foods: [
+        { name: "Canned soup", serving: "1 cup", amount: "500-1000mg" },
+        { name: "Canned vegetables", serving: "1/2 cup", amount: "200-400mg" },
+        { name: "Canned beans", serving: "1/2 cup", amount: "400mg" },
+        { name: "Canned tuna", serving: "3 oz", amount: "300mg" },
+        { name: "Canned pasta", serving: "1 cup", amount: "700mg" },
+        { name: "Canned chili", serving: "1 cup", amount: "1000mg" },
+        { name: "Pickles", serving: "1 medium", amount: "300mg" },
+        { name: "Olives", serving: "5 green", amount: "200mg" },
+      ]
+    },
+    {
+      name: "Fast Food & Restaurant Items",
+      foods: [
+        { name: "Fast food burger", serving: "1 burger", amount: "500mg" },
+        { name: "French fries", serving: "medium", amount: "300mg" },
+        { name: "Pizza", serving: "1 slice", amount: "600mg" },
+        { name: "Fried chicken", serving: "1 piece", amount: "400mg" },
+        { name: "Tacos", serving: "1 taco", amount: "300mg" },
+        { name: "Chinese food", serving: "1 cup", amount: "1000mg" },
+        { name: "Restaurant soup", serving: "1 cup", amount: "1000mg" },
+        { name: "Chicken nuggets", serving: "6 pieces", amount: "500mg" },
+      ]
+    },
+    {
+      name: "Snacks & Packaged Foods",
+      foods: [
+        { name: "Potato chips", serving: "1 oz", amount: "150-200mg" },
+        { name: "Pretzels", serving: "1 oz", amount: "400mg" },
+        { name: "Salted nuts", serving: "1 oz", amount: "200mg" },
+        { name: "Microwave popcorn", serving: "3 cups", amount: "250mg" },
+        { name: "Crackers", serving: "5 crackers", amount: "200mg" },
+        { name: "Cheese puffs", serving: "1 oz", amount: "300mg" },
+        { name: "Trail mix (salted)", serving: "1/4 cup", amount: "150mg" },
+        { name: "Beef jerky", serving: "1 oz", amount: "500mg" },
+      ]
+    },
+    {
+      name: "Dairy & Cheese",
+      foods: [
+        { name: "Cottage cheese", serving: "1/2 cup", amount: "400mg" },
+        { name: "Cheddar cheese", serving: "2 oz", amount: "350mg" },
+        { name: "Parmesan cheese", serving: "2 tbsp", amount: "250mg" },
+        { name: "Feta cheese", serving: "1 oz", amount: "400mg" },
+        { name: "Processed cheese", serving: "2 oz", amount: "700mg" },
+        { name: "Buttermilk", serving: "1 cup", amount: "300mg" },
+        { name: "Blue cheese", serving: "1 oz", amount: "400mg" },
+        { name: "Cheese sauce", serving: "1/4 cup", amount: "450mg" },
+      ]
+    },
+    {
+      name: "Bread & Grains",
+      foods: [
+        { name: "White bread", serving: "2 slices", amount: "250mg" },
+        { name: "Bagel", serving: "1 bagel", amount: "400mg" },
+        { name: "Cereal", serving: "1 cup", amount: "200-300mg" },
+        { name: "Pancake mix", serving: "3 pancakes", amount: "500mg" },
+        { name: "English muffin", serving: "1 muffin", amount: "200mg" },
+        { name: "Muffin", serving: "1 muffin", amount: "350mg" },
+        { name: "Cornbread", serving: "1 piece", amount: "400mg" },
+        { name: "Stuffing", serving: "1/2 cup", amount: "500mg" },
+      ]
+    },
+    {
+      name: "Condiments & Sauces",
+      foods: [
+        { name: "Ketchup", serving: "1 tbsp", amount: "150mg" },
+        { name: "BBQ sauce", serving: "2 tbsp", amount: "250mg" },
+        { name: "Salad dressing", serving: "2 tbsp", amount: "300mg" },
+        { name: "Teriyaki sauce", serving: "1 tbsp", amount: "700mg" },
+        { name: "Mustard", serving: "1 tbsp", amount: "200mg" },
+        { name: "Relish", serving: "1 tbsp", amount: "120mg" },
+        { name: "Pasta sauce", serving: "1/2 cup", amount: "400mg" },
+        { name: "Gravy", serving: "1/4 cup", amount: "300mg" },
+      ]
+    },
+  ];
+
+  return (
+    <FoodReferencePage
+      title="Sodium-Rich Foods Reference"
+      description="Use this guide to help estimate your sodium intake."
+      servingEquivalent="500mg of sodium"
+      guidelines={{
+        averageIntake: "~3400mg per day (6.8 servings)",
+        recommendedIntake: "2300-5000mg per day (4.6-10 servings)",
+        additionalNote: "Higher for athletes and active individuals"
+      }}
+      foodCategories={foodCategories}
+      disclaimerNote="These values are approximate. Check product labels for exact sodium content."
+    />
+  );
+}

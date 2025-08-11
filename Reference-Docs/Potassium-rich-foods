@@ -1,0 +1,116 @@
+import FoodReferencePage from "@/components/food-reference-page";
+
+export default function PotassiumRichFoods() {
+  const foodCategories = [
+    {
+      name: "Fruits",
+      foods: [
+        { name: "Banana", serving: "1 medium", amount: "400mg" },
+        { name: "Avocado", serving: "1/2 medium", amount: "500mg" },
+        { name: "Orange", serving: "1 medium", amount: "250mg" },
+        { name: "Watermelon", serving: "2 cups", amount: "400mg" },
+        { name: "Kiwi", serving: "2 medium", amount: "400mg" },
+        { name: "Cantaloupe", serving: "1 cup", amount: "400mg" },
+        { name: "Apricots", serving: "3 medium", amount: "350mg" },
+        { name: "Mango", serving: "1 medium", amount: "400mg" },
+        { name: "Dried fruit", serving: "1/4 cup", amount: "300-400mg" },
+      ]
+    },
+    {
+      name: "Vegetables",
+      foods: [
+        { name: "Potato", serving: "1 medium", amount: "800mg" },
+        { name: "Sweet potato", serving: "1 medium", amount: "500mg" },
+        { name: "Spinach", serving: "1 cup cooked", amount: "800mg" },
+        { name: "Tomato", serving: "1 medium", amount: "300mg" },
+        { name: "Broccoli", serving: "1 cup", amount: "400mg" },
+        { name: "Beets", serving: "1 cup", amount: "450mg" },
+        { name: "Carrots", serving: "1 cup", amount: "400mg" },
+        { name: "Mushrooms", serving: "1 cup", amount: "400mg" },
+        { name: "Squash", serving: "1 cup", amount: "400mg" },
+      ]
+    },
+    {
+      name: "Beans & Legumes",
+      foods: [
+        { name: "Black beans", serving: "1/2 cup", amount: "400mg" },
+        { name: "Kidney beans", serving: "1/2 cup", amount: "400mg" },
+        { name: "Lima beans", serving: "1/2 cup", amount: "500mg" },
+        { name: "Lentils", serving: "1/2 cup", amount: "400mg" },
+        { name: "Edamame", serving: "1/2 cup", amount: "400mg" },
+        { name: "Chickpeas", serving: "1/2 cup", amount: "350mg" },
+        { name: "Pinto beans", serving: "1/2 cup", amount: "400mg" },
+        { name: "White beans", serving: "1/2 cup", amount: "600mg" },
+      ]
+    },
+    {
+      name: "Dairy & Alternatives",
+      foods: [
+        { name: "Milk", serving: "1 cup", amount: "350mg" },
+        { name: "Yogurt", serving: "1 cup", amount: "400mg" },
+        { name: "Soy milk", serving: "1 cup", amount: "300mg" },
+        { name: "Almond milk (fortified)", serving: "1 cup", amount: "150mg" },
+        { name: "Coconut water", serving: "1 cup", amount: "600mg" },
+      ]
+    },
+    {
+      name: "Proteins",
+      foods: [
+        { name: "Salmon", serving: "3 oz", amount: "300mg" },
+        { name: "Chicken", serving: "3 oz", amount: "300mg" },
+        { name: "Turkey", serving: "3 oz", amount: "250mg" },
+        { name: "Beef", serving: "3 oz", amount: "250mg" },
+        { name: "Pork", serving: "3 oz", amount: "300mg" },
+        { name: "Tofu", serving: "1/2 cup", amount: "300mg" },
+      ]
+    },
+    {
+      name: "Nuts & Seeds",
+      foods: [
+        { name: "Almonds", serving: "1/4 cup", amount: "200mg" },
+        { name: "Pistachios", serving: "1/4 cup", amount: "300mg" },
+        { name: "Sunflower seeds", serving: "1/4 cup", amount: "200mg" },
+        { name: "Pumpkin seeds", serving: "1/4 cup", amount: "250mg" },
+        { name: "Flax seeds", serving: "2 tbsp", amount: "100mg" },
+        { name: "Chia seeds", serving: "2 tbsp", amount: "150mg" },
+        { name: "Peanut butter", serving: "2 tbsp", amount: "200mg" },
+      ]
+    },
+    {
+      name: "Grains",
+      foods: [
+        { name: "Quinoa", serving: "1/2 cup cooked", amount: "250mg" },
+        { name: "Wheat bran", serving: "1/2 cup", amount: "300mg" },
+        { name: "Brown rice", serving: "1/2 cup", amount: "150mg" },
+        { name: "Oatmeal", serving: "1 cup cooked", amount: "200mg" },
+        { name: "Whole wheat bread", serving: "2 slices", amount: "150mg" },
+      ]
+    },
+    {
+      name: "Other Foods",
+      foods: [
+        { name: "Molasses", serving: "1 tbsp", amount: "300mg" },
+        { name: "Dark chocolate", serving: "1 oz", amount: "200mg" },
+        { name: "Coffee", serving: "8 oz", amount: "100mg" },
+        { name: "Tomato sauce", serving: "1/2 cup", amount: "400mg" },
+        { name: "Vegetable juice", serving: "8 oz", amount: "500mg" },
+        { name: "Orange juice", serving: "8 oz", amount: "450mg" },
+      ]
+    },
+  ];
+
+  return (
+    <FoodReferencePage
+      title="Potassium-Rich Foods Reference"
+      description="Use this guide to help estimate your potassium intake."
+      servingEquivalent="500mg of potassium"
+      guidelines={{
+        averageIntake: "~2500mg per day (5 servings)",
+        recommendedIntake: "3500-7000mg per day (7-14 servings)",
+        additionalNote: "Varies based on activity level and body size"
+      }}
+      foodCategories={foodCategories}
+      disclaimerNote="These values are approximate. Potassium content can vary based on growing conditions and preparation methods."
+    />
+  );
+}

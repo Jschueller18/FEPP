@@ -1,0 +1,127 @@
+import FoodReferencePage from "@/components/food-reference-page";
+
+export default function CalciumRichFoods() {
+  const foodCategories = [
+    {
+      name: "Dairy Products",
+      foods: [
+        { name: "Milk", serving: "1 cup", amount: "300mg" },
+        { name: "Yogurt", serving: "1 cup", amount: "300mg" },
+        { name: "Cheese, cheddar", serving: "1 oz", amount: "200mg" },
+        { name: "Cheese, mozzarella", serving: "1 oz", amount: "200mg" },
+        { name: "Cheese, parmesan", serving: "1 tbsp", amount: "70mg" },
+        { name: "Cottage cheese", serving: "1 cup", amount: "150mg" },
+        { name: "Ricotta cheese", serving: "1/2 cup", amount: "250mg" },
+        { name: "Greek yogurt", serving: "1 cup", amount: "200mg" },
+        { name: "Ice cream", serving: "1/2 cup", amount: "100mg" },
+      ]
+    },
+    {
+      name: "Plant-Based Milks (Fortified)",
+      foods: [
+        { name: "Almond milk, fortified", serving: "1 cup", amount: "300mg" },
+        { name: "Soy milk, fortified", serving: "1 cup", amount: "300mg" },
+        { name: "Oat milk, fortified", serving: "1 cup", amount: "300mg" },
+        { name: "Rice milk, fortified", serving: "1 cup", amount: "300mg" },
+        { name: "Hemp milk, fortified", serving: "1 cup", amount: "300mg" },
+        { name: "Coconut milk, fortified", serving: "1 cup", amount: "300mg" },
+      ]
+    },
+    {
+      name: "Leafy Greens",
+      foods: [
+        { name: "Kale", serving: "1 cup cooked", amount: "180mg" },
+        { name: "Collard greens", serving: "1 cup cooked", amount: "250mg" },
+        { name: "Mustard greens", serving: "1 cup cooked", amount: "150mg" },
+        { name: "Turnip greens", serving: "1 cup cooked", amount: "200mg" },
+        { name: "Bok choy", serving: "1 cup cooked", amount: "150mg" },
+        { name: "Spinach", serving: "1 cup cooked", amount: "250mg" },
+        { name: "Broccoli", serving: "1 cup cooked", amount: "60mg" },
+      ]
+    },
+    {
+      name: "Seeds & Nuts",
+      foods: [
+        { name: "Chia seeds", serving: "2 tbsp", amount: "180mg" },
+        { name: "Sesame seeds", serving: "2 tbsp", amount: "175mg" },
+        { name: "Almonds", serving: "1/4 cup", amount: "100mg" },
+        { name: "Tahini (sesame paste)", serving: "2 tbsp", amount: "120mg" },
+        { name: "Flax seeds", serving: "2 tbsp", amount: "50mg" },
+        { name: "Sunflower seeds", serving: "1/4 cup", amount: "30mg" },
+        { name: "Brazil nuts", serving: "2 tbsp", amount: "50mg" },
+        { name: "Almond butter", serving: "2 tbsp", amount: "85mg" },
+      ]
+    },
+    {
+      name: "Seafood",
+      foods: [
+        { name: "Sardines with bones", serving: "3 oz", amount: "325mg" },
+        { name: "Canned salmon with bones", serving: "3 oz", amount: "180mg" },
+        { name: "Shrimp", serving: "3 oz", amount: "80mg" },
+        { name: "Oysters", serving: "3 oz", amount: "100mg" },
+        { name: "Crab", serving: "3 oz", amount: "50mg" },
+        { name: "Trout", serving: "3 oz", amount: "75mg" },
+      ]
+    },
+    {
+      name: "Beans & Legumes",
+      foods: [
+        { name: "White beans", serving: "1/2 cup cooked", amount: "100mg" },
+        { name: "Navy beans", serving: "1/2 cup cooked", amount: "65mg" },
+        { name: "Black beans", serving: "1/2 cup cooked", amount: "35mg" },
+        { name: "Chickpeas", serving: "1/2 cup cooked", amount: "40mg" },
+        { name: "Soybeans", serving: "1/2 cup cooked", amount: "130mg" },
+        { name: "Lentils", serving: "1/2 cup cooked", amount: "20mg" },
+        { name: "Tofu (made with calcium sulfate)", serving: "1/2 cup", amount: "400mg" },
+        { name: "Edamame", serving: "1/2 cup", amount: "50mg" },
+      ]
+    },
+    {
+      name: "Fortified Foods",
+      foods: [
+        { name: "Orange juice, fortified", serving: "1 cup", amount: "300mg" },
+        { name: "Breakfast cereal, fortified", serving: "1 cup", amount: "100-1000mg" },
+        { name: "Bread, fortified", serving: "2 slices", amount: "150mg" },
+        { name: "Oatmeal, fortified", serving: "1 cup", amount: "200mg" },
+        { name: "Plant-based yogurt, fortified", serving: "1 cup", amount: "300mg" },
+      ]
+    },
+    {
+      name: "Fruits & Vegetables",
+      foods: [
+        { name: "Dried figs", serving: "5 figs", amount: "135mg" },
+        { name: "Oranges", serving: "1 medium", amount: "60mg" },
+        { name: "Rhubarb", serving: "1 cup cooked", amount: "350mg" },
+        { name: "Sweet potato", serving: "1 medium", amount: "40mg" },
+        { name: "Butternut squash", serving: "1 cup cooked", amount: "45mg" },
+        { name: "Okra", serving: "1 cup cooked", amount: "100mg" },
+        { name: "Raisins", serving: "1/4 cup", amount: "25mg" },
+      ]
+    },
+    {
+      name: "Other Foods",
+      foods: [
+        { name: "Blackstrap molasses", serving: "1 tbsp", amount: "170mg" },
+        { name: "Calcium-fortified water", serving: "8 oz", amount: "200mg" },
+        { name: "Corn tortillas (made with lime)", serving: "2", amount: "40mg" },
+        { name: "Natto (fermented soybeans)", serving: "1/2 cup", amount: "380mg" },
+        { name: "Calcium supplements", serving: "1 tablet", amount: "200-600mg" },
+      ]
+    },
+  ];
+
+  return (
+    <FoodReferencePage
+      title="Calcium-Rich Foods Reference"
+      description="Use this guide to help estimate your calcium intake."
+      servingEquivalent="200mg of calcium"
+      guidelines={{
+        averageIntake: "~875mg per day (4.4 servings)",
+        recommendedIntake: "1000-1300mg per day (5-6.5 servings)",
+        additionalNote: "Higher for bone health and teenagers"
+      }}
+      foodCategories={foodCategories}
+      disclaimerNote="These values are approximate. Actual calcium content can vary based on brand, fortification levels, and preparation methods."
+    />
+  );
+}
